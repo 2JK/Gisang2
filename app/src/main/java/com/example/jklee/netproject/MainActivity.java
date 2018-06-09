@@ -1,6 +1,7 @@
 package com.example.jklee.netproject;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -37,13 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
     Button button_refresh;
 
-    Time mTime;
+    public static Time mTime;
     Runnable run_Time;
     Handler timeHandler;
 
     Runnable run_Weather;
     Handler weatherHandler;
-    int WEATHER_RESET_TIME = 1000;
+    static int WEATHER_RESET_TIME = 1000;
 
     TextView textView_Date;
     TextView textView_Time;
@@ -51,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textView_location;
 
-    LinearLayout linearLayout_location;
-    LinearLayout linearLayout_cloth;
+     LinearLayout linearLayout_location;
+     LinearLayout linearLayout_cloth;
     ConstraintLayout main_constraintLayout;
 
-    ImageView imageView_weather;
+      public static ImageView imageView_weather;
     public static ImageView imageView_mask;
     public static ImageView imageView_umbrella;
     public static ImageView imageView_sunglasses;
@@ -66,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
     TextView textView_pm10_num;
     TextView textView_pm25;
     TextView textView_pm25_num;
-
+    TextView textView_cDialogTitle;
     //임시 강제 파라미터
     int dust_density = 259; // 미세먼지 농도
-    String weather_api_key = "496073f3-0770-4307-be88-86970654ea17";
+    public static String weather_api_key = "496073f3-0770-4307-be88-86970654ea17";
 
     FontSetting fontSetting;
 
@@ -79,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean isAccessCoarseLocation = false;
     private boolean isPermission = false;
 
-    private GpsInfo gps;
-    Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +108,9 @@ public class MainActivity extends AppCompatActivity {
         run_Weather = new Runnable() {
             @Override
             public void run() {
-                sendRequest4Weather();
+                Location.getLocation(getApplicationContext());
+                setLocation();
+                Weather.sendRequest4Weather(getApplicationContext());
                 Weather.getWeatherData();
                 setWeather();
                 weatherHandler.postDelayed(run_Weather, WEATHER_RESET_TIME);
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     //뷰들의 ID와 폰트 설정
     public void normalSetting() {
         /* ID등록 */
-        linearLayout_location = findViewById(R.id.linearLayout_location);
+        linearLayout_location  = findViewById(R.id.linearLayout_location);
         linearLayout_cloth = findViewById(R.id.linearLayout_cloth);
 
         //의류추천 레이아웃
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onLongClick(View v) {
                 CustomDialog cd = new CustomDialog(MainActivity.this);
                 cd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                cd.setCancelable(false);
+                cd.setCancelable(true);
                 cd.show();
                 return false;
             }
@@ -146,7 +147,9 @@ public class MainActivity extends AppCompatActivity {
         button_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendRequest4Weather();
+                Location.getLocation(getApplicationContext());
+                setLocation();
+                Weather.sendRequest4Weather(getApplicationContext());
                 Weather.getWeatherData();
                 setWeather();
             }
@@ -174,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
         textView_pm25 = findViewById(R.id.textView_pm25);
         textView_pm25_num = findViewById(R.id.textView_pm25_num);
 
+        textView_cDialogTitle = findViewById(R.id.textView_cDialogTitle);
+
         /* 폰트 셋팅 */
         fontSetting = new FontSetting(getApplicationContext());
         //위치
@@ -191,35 +196,8 @@ public class MainActivity extends AppCompatActivity {
         textView_pm25.setTypeface(fontSetting.getTypeface_Contents());
         textView_pm25_num.setTypeface(fontSetting.getTypeface_Title());
 
-    }
-
-    public void sendRequest4Weather() {
-
-        // RequestQueue를 새로 만들어준다.
-        RequestQueue weather_que = Volley.newRequestQueue(this);
-        // Request를 요청 할 URL
-        String url = "https://api2.sktelecom.com/weather/current/hourly?version=2&lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&appKey=" + weather_api_key;
-        // StringRequest를 보낸다.
-        StringRequest weatherRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Weather.data = response;
-                        Log.e("weather", "Response is: " + response);
-
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-      /*          if(error != null)
-                Log.e("error", error.getMessage());*/
-            }
-        });
-        // RequestQueue에 현재 Task를 추가해준다.
-        weather_que.add(weatherRequest);
-
+        //얘는 왜 안되냥
+        //textView_cDialogTitle.setTypeface(fontSetting.getTypeface_Title());
 
     }
 
@@ -251,73 +229,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setLocation() {
-        callPermission();
-        if (!isPermission) {
-            callPermission();
-        }
-        gps = new GpsInfo(getApplicationContext());
-        // GPS 사용유무 가져오기
-        if (gps.isGetLocation())
-            location = new Location(gps.getLatitude(), gps.getLongitude());
-        else {
-            // GPS 를 사용할수 없으므로
-            gps.showSettingsAlert();
-        }
-
-        Geocoder geocoder = new Geocoder(getApplicationContext());
-        List<Address> list = null;
-        try {
-            list = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            if (list != null) {
-                if (list.size() == 0) {
-                    textView_location.setText("Null");
-                } else {
-
-                    if (!list.get(0).getCountryCode().toString().equals("KR")) {
-                        Toast.makeText(getApplicationContext(), "해외는 지원하지 않습니다.", Toast.LENGTH_SHORT);
-                        textView_location.setText("해외");
-                    } else {
-
-                        int i, j = 0;
-                        Log.d("address", list.get(0).getAddressLine(0).toString());
-
-                        //주소 중 ~~시 까지 제끼기
-                        for (i = 0; i < list.get(0).getAddressLine(0).toString().length(); i++) {
-                            if (list.get(0).getAddressLine(0).charAt(i) == ' ') {
-                                j++;
-                                if (j >= 2)
-                                    break;
-                            }
-                        }
-
-                        //첫번째 주소 저장
-                        for (j = 0; j < list.get(0).getAddressLine(0).toString().length(); j++) {
-                            location.setAddress(location.getAddress().concat(String.valueOf(list.get(0).getAddressLine(0).charAt(++i))));
-                            if (list.get(0).getAddressLine(0).charAt(i + 1) == ' ')
-                                break;
-                        }
-
-                        location.setAddress(location.getAddress().concat(","));
-                        //두번째 주소 저장
-                        for (j = 0; j < list.get(0).getAddressLine(0).toString().length(); j++) {
-                            location.setAddress(location.getAddress().concat(String.valueOf(list.get(0).getAddressLine(0).charAt(++i))));
-                            if (list.get(0).getAddressLine(0).charAt(i + 1) == ' ')
-                                break;
-                        }
-                        //화면에 주소 출력
-                        textView_location.setText(location.getAddress());
-                    }
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("GEOCODER", "서버에서 주소변환시 에러발생");
-        }
-
-
+    public void setLocation()
+    {
+        //화면에 주소 출력
+        textView_location.setText(Location.getAddress());
     }
+
+
 
     public void setWeather() {
 
@@ -453,47 +371,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        if (requestCode == PERMISSIONS_ACCESS_FINE_LOCATION
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-            isAccessFineLocation = true;
-
-        } else if (requestCode == PERMISSIONS_ACCESS_COARSE_LOCATION
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-            isAccessCoarseLocation = true;
-        }
-
-        if (isAccessFineLocation && isAccessCoarseLocation) {
-            isPermission = true;
-        }
-    }
-
-    // 전화번호 권한 요청
-    private void callPermission() {
-        // Check the SDK version and whether the permission is already granted or not.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_ACCESS_FINE_LOCATION);
-
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    PERMISSIONS_ACCESS_COARSE_LOCATION);
-        } else {
-            isPermission = true;
-        }
-    }
 
     public static void maskOn()
     {

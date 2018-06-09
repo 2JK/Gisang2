@@ -1,6 +1,14 @@
 package com.example.jklee.netproject;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,4 +85,33 @@ public class Weather {
     public static void setWeather(String weather) {
         Weather.weather = weather;
     }
+
+    public static void sendRequest4Weather(Context c) {
+
+        // RequestQueue를 새로 만들어준다.
+        RequestQueue weather_que = Volley.newRequestQueue(c);
+        // Request를 요청 할 URL
+        String url = "https://api2.sktelecom.com/weather/current/hourly?version=2&lat=" + Location.getLatitude() + "&lon=" + Location.getLongitude() + "&appKey=" + MainActivity.weather_api_key;
+        // StringRequest를 보낸다.
+        StringRequest weatherRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Weather.data = response;
+                        Weather.getWeatherData();
+                        Log.e("weather", "Response is: " + response);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+      /*          if(error != null)
+                Log.e("error", error.getMessage());*/
+            }
+        });
+        // RequestQueue에 현재 Task를 추가해준다.
+        weather_que.add(weatherRequest);
+    }
+
 }
