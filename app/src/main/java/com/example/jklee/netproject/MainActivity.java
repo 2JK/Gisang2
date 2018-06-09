@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textView_pm10_num;
     TextView textView_pm25;
     TextView textView_pm25_num;
-    TextView textView_cDialogTitle;
+
     //임시 강제 파라미터
     int dust_density = 259; // 미세먼지 농도
     public static String weather_api_key = "496073f3-0770-4307-be88-86970654ea17";
@@ -90,9 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
         normalSetting();
 
-        setLocation();
-
-
         mTime = new Time();
         run_Time = new Runnable() {
             @Override
@@ -104,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
         };
         timeHandler = new Handler();
         timeHandler.postDelayed(run_Time, 1000);
+
+        setLocation();
+        setWeather();
 
         run_Weather = new Runnable() {
             @Override
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         textView_pm25 = findViewById(R.id.textView_pm25);
         textView_pm25_num = findViewById(R.id.textView_pm25_num);
 
-        textView_cDialogTitle = findViewById(R.id.textView_cDialogTitle);
+
 
         /* 폰트 셋팅 */
         fontSetting = new FontSetting(getApplicationContext());
@@ -196,8 +196,6 @@ public class MainActivity extends AppCompatActivity {
         textView_pm25.setTypeface(fontSetting.getTypeface_Contents());
         textView_pm25_num.setTypeface(fontSetting.getTypeface_Title());
 
-        //얘는 왜 안되냥
-        //textView_cDialogTitle.setTypeface(fontSetting.getTypeface_Title());
 
     }
 
