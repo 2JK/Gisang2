@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         timeHandler.postDelayed(run_Time, 1000);
 
         setLocation();
+
         setWeather();
 
         run_Weather = new Runnable() {
