@@ -21,7 +21,8 @@ public class Weather {
     private static int temperature_max;
     private static int temperature_min;
     private static String weather;
-    private static int dustDensity;
+    private static int pm10;
+    private static int pm25;
 
     private static String weatherCode = "";
     /* 하늘상태 코드명 SKY_O01:맑음, SKY_O02구름조금, SKY_O03:구름많음,SKY_O04:구름많고 비,
@@ -66,8 +67,8 @@ public class Weather {
         return temperature;
     }
 
-    public static int getDustDensity() {
-        return dustDensity;
+    public static int getPm10() {
+        return pm10;
     }
 
     public static String getWeather() {
@@ -78,8 +79,8 @@ public class Weather {
         Weather.temperature = temperature;
     }
 
-    public static void setDustDensity(int dustDensity) {
-        Weather.dustDensity = dustDensity;
+    public static void setPm10(int pm10) {
+        Weather.pm10 = pm10;
     }
 
     public static void setWeather(String weather) {
@@ -114,4 +115,11 @@ public class Weather {
         weather_que.add(weatherRequest);
     }
 
+    public static int getPm25() {
+        return pm25;
+    }
+
+    public static void setPm25(int pm25) {
+        Weather.pm25 = pm25;
+    }
 }

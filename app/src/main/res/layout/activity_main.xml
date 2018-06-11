@@ -41,20 +41,23 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/textView_AmPm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오전"
+            android:textColor="@android:color/white"
+            android:textSize="22dp" />
+
+        <TextView
             android:id="@+id/textView_Time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
             android:text="00:00:00"
             android:textColor="@android:color/white"
             android:textSize="30dp" />
 
-        <TextView
-            android:id="@+id/textView_AmPm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="AM"
-            android:textColor="@android:color/white"
-            android:textSize="22dp" />
+
 
     </LinearLayout>
 
@@ -188,9 +191,11 @@
             android:background="@drawable/icon_cloth" />
 
         <TextView
+            android:id="@+id/textView_cloth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="의류 추천"
+            android:text="추천 의상"
+            android:paddingTop="8dp"
             android:textColor="@android:color/white"
             android:textSize="20dp" />
 
@@ -205,6 +210,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
+
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -217,19 +223,22 @@
             android:id="@+id/imageView_mask"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/icon_mask" />
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/icon_mask_off" />
 
         <ImageView
             android:id="@+id/imageView_umbrella"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/icon_umbrella" />
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/icon_umbrella_off" />
 
         <ImageView
             android:id="@+id/imageView_sunglasses"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/icon_sunglasses" />
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/icon_sunglasses_off" />
     </LinearLayout>
 
     <LinearLayout
@@ -299,7 +308,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="3dp"
-            android:text=" \?㎍/㎥"
+            android:text="\?"
+            android:textColor="@android:color/white"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView_pm10_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:text="㎍/㎥"
             android:textColor="@android:color/white"
             android:textSize="20dp" />
 
@@ -342,7 +360,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="3dp"
-            android:text=" \?㎍/㎥"
+            android:text="\?"
+            android:textColor="@android:color/white"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView_pm25_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:text="㎍/㎥"
             android:textColor="@android:color/white"
             android:textSize="20dp" />
 

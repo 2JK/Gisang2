@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IntroActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="사용자 맞춤형 기상정보 서비스"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기상이"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="32dp"
+            android:text="원활한 사용을 위해 개인 정보를 입력해주세요."
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:background="#EAEAEA">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="24dp"
+            android:padding="24dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="나이"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF" />
+
+                <RadioGroup
+                    android:id="@+id/rbtngrp_age"
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3">
+
+                    <RadioButton
+                        android:id="@+id/rbtn_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="10대"
+                        android:textColor="#FFFFFF" />
+
+                    <RadioButton
+                        android:id="@+id/rbtn_20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="20대"
+                        android:textColor="#FFFFFF" />
+
+                    <RadioButton
+                        android:id="@+id/rbtn_30"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="30대"
+                        android:textColor="#FFFFFF" />
+
+                </RadioGroup>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:layout_marginTop="32dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="성별"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF" />
+
+                <RadioGroup
+                    android:id="@+id/rbtngrp_gender"
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3">
+
+                    <RadioButton
+                        android:id="@+id/rbtn_male"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="남성"
+                        android:textColor="#FFFFFF"/>
+
+                    <RadioButton
+                        android:id="@+id/rbtn_female"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="여성"
+                        android:textColor="#FFFFFF"/>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp">
+
+                <Button
+                    android:id="@+id/btn_ok"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="확인"
+                    android:textSize="16sp"
+                    android:padding="8dp"/>
+
+                <Button
+                    android:id="@+id/btn_reset"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="초기화"
+                    android:textSize="16sp"
+                    android:padding="8dp"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

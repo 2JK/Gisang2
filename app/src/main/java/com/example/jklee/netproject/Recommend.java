@@ -11,7 +11,7 @@ public class Recommend
     public static void setRecommend(Weather weather)
     {
         int temperature = weather.getTemperature();
-        int dust = weather.getDustDensity();
+        int dust = weather.getPm10();
 
         if (temperature < 4)
             recommendation.add("\"날이 매우 춥습니다. 두꺼운 패딩점퍼에 목도리는 어떠신가요?\"");

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="350dp"
+    android:layout_height="390dp"
     android:background="@drawable/dialog_background"
    >
 
@@ -60,7 +60,7 @@
                 android:id="@+id/imageView_gender"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:background="@drawable/icon_male"
+
                 />
 
         </LinearLayout>
@@ -80,11 +80,12 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="290dp"
+        android:background="@drawable/dialog_contents"
         android:gravity="center"
         android:orientation="vertical"
-        android:background="@drawable/dialog_contents"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,8 +95,36 @@
         <ImageView
             android:id="@+id/imageview_cloth"
             android:layout_width="290dp"
-            android:layout_height="250dp"
+            android:layout_height="290dp"
             android:background="@drawable/w_cloth_28" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6"
+        app:layout_constraintVertical_bias="0.0">
+
+        <Button
+            android:id="@+id/button_store"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="#8553d0"
+            android:text="버튼"
+            android:textColor="@android:color/white"
+            android:textSize="15dp" />
 
     </LinearLayout>
 

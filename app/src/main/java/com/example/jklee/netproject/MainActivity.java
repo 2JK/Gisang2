@@ -1,37 +1,21 @@
 package com.example.jklee.netproject;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Address;
-import android.location.Geocoder;
-import android.os.Build;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import java.io.IOException;
-import java.util.List;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,11 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textView_location;
 
-     LinearLayout linearLayout_location;
-     LinearLayout linearLayout_cloth;
+    TextView textView_cloth;
+
+    LinearLayout linearLayout_location;
+    LinearLayout linearLayout_cloth;
     ConstraintLayout main_constraintLayout;
 
-      public static ImageView imageView_weather;
+    public static ImageView imageView_weather;
     public static ImageView imageView_mask;
     public static ImageView imageView_umbrella;
     public static ImageView imageView_sunglasses;
@@ -65,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
     TextView textView_dust_densityinfo;
     TextView textView_pm10;
     TextView textView_pm10_num;
+    TextView textView_pm10_unit;
     TextView textView_pm25;
     TextView textView_pm25_num;
+    TextView textView_pm25_unit;
 
     //임시 강제 파라미터
     int dust_density = 259; // 미세먼지 농도
@@ -80,6 +68,15 @@ public class MainActivity extends AppCompatActivity {
     private boolean isAccessCoarseLocation = false;
     private boolean isPermission = false;
 
+    public static String Gender;
+    SharedPreferences pref;
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        View view = getWindow().getDecorView();
+        view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +85,9 @@ public class MainActivity extends AppCompatActivity {
         View view = getWindow().getDecorView();
         view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
+        firstExecute();
         normalSetting();
+
 
         mTime = new Time();
         run_Time = new Runnable() {
@@ -120,27 +119,46 @@ public class MainActivity extends AppCompatActivity {
         weatherHandler = new Handler();
         weatherHandler.postDelayed(run_Weather, WEATHER_RESET_TIME);
 
-        setMainBgColor(dust_density);
+        Weather.setPm10(30);
+        setMainBgColor(Weather.getPm10());
 
+    }
+
+    private void firstExecute() {
+        pref = getSharedPreferences("gisang", MODE_PRIVATE);
+        boolean isAlreadyExecuted = pref.getBoolean("isAlreadyExecuted", false);
+        if (isAlreadyExecuted == false) {
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("isAlreadyExecuted", true);
+            editor.commit();
+
+            Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
+            startActivity(intent);
+        } else {
+            if (pref.getBoolean("isMale", false))
+                Gender = "male";
+            else
+                Gender = "female";
+        }
     }
 
     //뷰들의 ID와 폰트 설정
     public void normalSetting() {
         /* ID등록 */
-        linearLayout_location  = findViewById(R.id.linearLayout_location);
+        linearLayout_location = findViewById(R.id.linearLayout_location);
         linearLayout_cloth = findViewById(R.id.linearLayout_cloth);
 
         //의류추천 레이아웃
-        linearLayout_cloth.setOnLongClickListener(new View.OnLongClickListener() {
+        linearLayout_cloth.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 CustomDialog cd = new CustomDialog(MainActivity.this);
                 cd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 cd.setCancelable(true);
                 cd.show();
-                return false;
             }
         });
+ 
         main_constraintLayout = findViewById(R.id.main_constraintLayout);
 
         //새로고침 버튼
@@ -153,14 +171,15 @@ public class MainActivity extends AppCompatActivity {
                 Weather.sendRequest4Weather(getApplicationContext());
                 Weather.getWeatherData();
                 setWeather();
+                Random random = new Random();
+                setMainBgColor(random.nextInt(280));
+
             }
         });
 
         imageView_weather = findViewById(R.id.imageView_weather);
         imageView_mask = findViewById(R.id.imageView_mask);
-        imageView_mask.setVisibility(View.INVISIBLE);
         imageView_sunglasses = findViewById(R.id.imageView_sunglasses);
-        imageView_sunglasses.setVisibility(View.INVISIBLE);
         imageView_umbrella = findViewById(R.id.imageView_umbrella);
 
         //위치
@@ -177,26 +196,31 @@ public class MainActivity extends AppCompatActivity {
         textView_pm10_num = findViewById(R.id.textView_pm10_num);
         textView_pm25 = findViewById(R.id.textView_pm25);
         textView_pm25_num = findViewById(R.id.textView_pm25_num);
-
+        textView_pm10_unit = findViewById(R.id.textView_pm10_unit);
+        textView_pm25_unit = findViewById(R.id.textView_pm25_unit);
+        textView_cloth = findViewById(R.id.textView_cloth);
 
 
         /* 폰트 셋팅 */
         fontSetting = new FontSetting(getApplicationContext());
         //위치
-        textView_location.setTypeface(fontSetting.getTypeface_Contents());
+        textView_location.setTypeface(fontSetting.getTypeface_Main());
         //온도
-        textView_temperature.setTypeface(fontSetting.getTypeface_Title());
+        textView_temperature.setTypeface(fontSetting.getTypeface_Main());
         //시간
-        textView_Date.setTypeface(fontSetting.getTypeface_Contents());
-        textView_AmPm.setTypeface(fontSetting.getTypeface_Contents());
-        textView_Time.setTypeface(fontSetting.getTypeface_Contents());
+        textView_Date.setTypeface(fontSetting.getTypeface_Main());
+        textView_AmPm.setTypeface(fontSetting.getTypeface_Main());
+        textView_Time.setTypeface(fontSetting.getTypeface_Main());
         //미세먼지
-        textView_dust_densityinfo.setTypeface(fontSetting.getTypeface_Title());
-        textView_pm10.setTypeface(fontSetting.getTypeface_Contents());
-        textView_pm10_num.setTypeface(fontSetting.getTypeface_Title());
-        textView_pm25.setTypeface(fontSetting.getTypeface_Contents());
-        textView_pm25_num.setTypeface(fontSetting.getTypeface_Title());
+        textView_dust_densityinfo.setTypeface(fontSetting.getTypeface_Main());
+        textView_pm10.setTypeface(fontSetting.getTypeface_Main());
+        textView_pm10_num.setTypeface(fontSetting.getTypeface_Main());
+        textView_pm10_unit.setTypeface(fontSetting.getTypeface_Sub());
+        textView_pm25.setTypeface(fontSetting.getTypeface_Main());
+        textView_pm25_num.setTypeface(fontSetting.getTypeface_Main());
+        textView_pm25_unit.setTypeface(fontSetting.getTypeface_Sub());
 
+        textView_cloth.setTypeface(fontSetting.getTypeface_Main());
 
     }
 
@@ -207,33 +231,36 @@ public class MainActivity extends AppCompatActivity {
         textView_pm10_num.setText(density + "㎍/㎥");
         if (density < 31) // 좋음
         {
-            main_constraintLayout.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_blue));
+            main_constraintLayout.setBackgroundColor(Color.parseColor("#4d90eb"));
             textView_dust_densityinfo.setText("미세먼지 : 좋음");
+            maskOff();
         } else if (density < 81) // 보통
         {
-            main_constraintLayout.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_green));
+            main_constraintLayout.setBackgroundColor(Color.parseColor("#52ac52"));
             textView_dust_densityinfo.setText("미세먼지 : 보통");
+            maskOff();
         } else if (density < 121) // 약간나쁨
         {
-            main_constraintLayout.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_yellow));
+            main_constraintLayout.setBackgroundColor(Color.parseColor("#d8c03d"));
             textView_dust_densityinfo.setText("미세먼지 : 약간나쁨");
+            maskOn();
         } else if (density < 201) // 나쁨
         {
-            main_constraintLayout.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_orange));
+            main_constraintLayout.setBackgroundColor(Color.parseColor("#d87f3d"));
             textView_dust_densityinfo.setText("미세먼지 : 나쁨");
+            maskOn();
         } else // 매우나쁨
         {
-            main_constraintLayout.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_red));
+            main_constraintLayout.setBackgroundColor(Color.parseColor("#d83d57"));
             textView_dust_densityinfo.setText("미세먼지 : 매우나쁨");
+            maskOn();
         }
     }
 
-    public void setLocation()
-    {
+    public void setLocation() {
         //화면에 주소 출력
         textView_location.setText(Location.getAddress());
     }
-
 
 
     public void setWeather() {
@@ -329,13 +356,13 @@ public class MainActivity extends AppCompatActivity {
         date = mTime.monthDay;
         month = mTime.month + 1;
 
-        String cur_ampm = "AM";
+        String cur_ampm = "오전";
         if (hours == 0) {
             hours = 12;
         }
         if (hours > 12) {
             hours = hours - 12;
-            cur_ampm = "PM";
+            cur_ampm = "오후";
         }
 
         String text_time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
@@ -371,35 +398,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    public static void maskOn()
-    {
-        imageView_mask.setVisibility(View.VISIBLE);
+    public static void maskOn() {
+        imageView_mask.setImageResource(R.drawable.icon_mask);
     }
 
-    public static void maskOff()
-    {
-        imageView_mask.setVisibility(View.INVISIBLE);
+    public static void maskOff() {
+        imageView_mask.setImageResource(R.drawable.icon_mask_off);
     }
 
-    public static void umbrellaOn()
-    {
-        imageView_umbrella.setVisibility(View.VISIBLE);
+    public static void umbrellaOn() {
+        imageView_umbrella.setImageResource(R.drawable.icon_umbrella);
     }
 
-    public static void umbrellaOff()
-    {
-        imageView_umbrella.setVisibility(View.INVISIBLE);
+    public static void umbrellaOff() {
+        imageView_umbrella.setImageResource(R.drawable.icon_umbrella_off);
     }
 
-    public static void sunglassesOn()
-    {
-        imageView_sunglasses.setVisibility(View.VISIBLE);
+    public static void sunglassesOn() {
+        imageView_sunglasses.setImageResource(R.drawable.icon_sunglasses);
     }
 
-    public static void sunglassesOff()
-    {
-        imageView_sunglasses.setVisibility(View.INVISIBLE);
+    public static void sunglassesOff() {
+        imageView_sunglasses.setImageResource(R.drawable.icon_sunglasses_off);
     }
 
 }

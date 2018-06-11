@@ -138,6 +138,9 @@ public class ClientThread extends Thread {
             temp = new String(tempArr);
             tempRange = new String(tempRange);
 
+            Weather.setPm10(Integer.parseInt(pm10));
+            Weather.setPm25(Integer.parseInt(pm25));
+
             Log.d("SocketTest", "stationName : " + stationName + ", pm10 : " + pm10);
             socket.close();
             return;

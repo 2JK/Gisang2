@@ -7,9 +7,8 @@ import android.graphics.Typeface;
 public class FontSetting {
 
     public Context context;
-    public Typeface typeface_Title = null;
-    public Typeface typeface_Contents = null;
-    public Typeface typeface_RIX = null;
+    public Typeface typeface_Sub = null;
+    public Typeface typeface_Main = null;
 
     public FontSetting(Context context) {
         this.context = context;
@@ -18,21 +17,16 @@ public class FontSetting {
 
     public void setFont() {
         AssetManager assetManager = context.getResources().getAssets();
-        typeface_Title = Typeface.createFromAsset(assetManager, "Bold.ttf");
-        typeface_Contents = Typeface.createFromAsset(assetManager, "Regular.ttf");
-        typeface_RIX = Typeface.createFromAsset(assetManager, "RIX.ttf");
+        typeface_Sub = Typeface.createFromAsset(assetManager, "Sub.ttf");
+        typeface_Main = Typeface.createFromAsset(assetManager, "Main.ttf");
     }
 
-    public Typeface getTypeface_Title() {
-        return typeface_Title;
+    public Typeface getTypeface_Sub() {
+        return typeface_Sub;
     }
 
-    public Typeface getTypeface_Contents() {
-        return typeface_Contents;
-    }
-
-    public Typeface getTypeface_RIX() {
-        return typeface_RIX;
+    public Typeface getTypeface_Main() {
+        return typeface_Main;
     }
 
 }
