@@ -9,6 +9,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -127,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
     private void firstExecute() {
         pref = getSharedPreferences("gisang", MODE_PRIVATE);
         boolean isAlreadyExecuted = pref.getBoolean("isAlreadyExecuted", false);
-        if (isAlreadyExecuted == false) {
+        boolean isGenderSelected = pref.getBoolean("isSelected", false);
+
+        if (isGenderSelected == false) {
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("isAlreadyExecuted", true);
             editor.commit();
@@ -158,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 cd.show();
             }
         });
- 
+
         main_constraintLayout = findViewById(R.id.main_constraintLayout);
 
         //새로고침 버튼

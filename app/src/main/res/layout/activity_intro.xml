@@ -1,187 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".IntroActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/linearLayout8"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        android:background="@color/colorPrimary">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.246">
 
         <TextView
+            android:id="@+id/textView_gisang2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="사용자 맞춤형 기상정보 서비스"
-            android:textSize="24sp"
-            android:textColor="#FFFFFF"
-            android:layout_gravity="center_horizontal"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="기상이"
-            android:textSize="24sp"
-            android:textColor="#FFFFFF"
-            android:layout_gravity="center_horizontal"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="32dp"
-            android:text="원활한 사용을 위해 개인 정보를 입력해주세요."
-            android:textSize="16sp"
-            android:textColor="#FFFFFF"
-            android:layout_gravity="center_horizontal"/>
+            android:text="&quot;기상이&quot;"
+            android:textColor="#a282d3"
+            android:textSize="70dp" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout9"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
-        android:background="#EAEAEA">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout8"
+        app:layout_constraintVertical_bias="0.031">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="24dp"
-            android:padding="24dp">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="나이"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:textColor="#FFFFFF" />
-
-                <RadioGroup
-                    android:id="@+id/rbtngrp_age"
-                    android:orientation="horizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3">
-
-                    <RadioButton
-                        android:id="@+id/rbtn_10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="10대"
-                        android:textColor="#FFFFFF" />
-
-                    <RadioButton
-                        android:id="@+id/rbtn_20"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="20대"
-                        android:textColor="#FFFFFF" />
-
-                    <RadioButton
-                        android:id="@+id/rbtn_30"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="30대"
-                        android:textColor="#FFFFFF" />
-
-                </RadioGroup>
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:layout_marginTop="32dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="성별"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:textColor="#FFFFFF" />
-
-                <RadioGroup
-                    android:id="@+id/rbtngrp_gender"
-                    android:orientation="horizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3">
-
-                    <RadioButton
-                        android:id="@+id/rbtn_male"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="남성"
-                        android:textColor="#FFFFFF"/>
-
-                    <RadioButton
-                        android:id="@+id/rbtn_female"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="여성"
-                        android:textColor="#FFFFFF"/>
-
-                </RadioGroup>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp">
-
-                <Button
-                    android:id="@+id/btn_ok"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="확인"
-                    android:textSize="16sp"
-                    android:padding="8dp"/>
-
-                <Button
-                    android:id="@+id/btn_reset"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="초기화"
-                    android:textSize="16sp"
-                    android:padding="8dp"/>
-
-            </LinearLayout>
-
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/textView_gisang2_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용자 맞춤형 기상정보 서비스"
+            android:textColor="#a282d3"
+            android:textSize="25dp" />
 
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="84dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
+
+        <TextView
+            android:id="@+id/textView_gisang2_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="원활한 사용을 위해\n 개인 정보를 입력해주세요."
+            android:textColor="#a282d3"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="left"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout10"
+        app:layout_constraintVertical_bias="0.15">
+
+        <TextView
+            android:id="@+id/textView_gisang2_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="45dp"
+            android:text="성별"
+            android:textColor="#a282d3"
+            android:textSize="18dp" />
+
+        <RadioGroup
+            android:id="@+id/rbtngrp_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp">
+
+            <RadioButton
+                android:id="@+id/rbtn_male"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="8dp"
+                android:buttonTint="#8553d0"
+                android:text="남성"
+                android:textColor="#a282d3"
+                android:textSize="15dp" />
+
+            <RadioButton
+                android:id="@+id/rbtn_female"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="8dp"
+                android:buttonTint="#8553d0"
+                android:text="여성"
+                android:textColor="#a282d3"
+                android:textSize="15dp" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginBottom="108dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:gravity="left"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/textView_gisang2_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="45dp"
+            android:layout_gravity="center_vertical"
+            android:text="나이"
+            android:textColor="#a282d3"
+            android:textSize="18dp" />
+
+        <RadioGroup
+            android:id="@+id/rbtngrp_age"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp">
+
+            <RadioButton
+                android:id="@+id/rbtn_10"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:buttonTint="#8553d0"
+                android:text="10대"
+                android:layout_gravity="center_vertical"
+                android:textSize="15dp"
+                android:textColor="#a282d3" />
+
+            <RadioButton
+                android:id="@+id/rbtn_20"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:buttonTint="#8553d0"
+                android:text="20대"
+                android:layout_gravity="center_vertical"
+                android:textSize="15dp"
+                android:textColor="#a282d3" />
+
+            <RadioButton
+                android:id="@+id/rbtn_30"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:buttonTint="#8553d0"
+                android:text="30대"
+                android:layout_gravity="center_vertical"
+                android:textSize="15dp"
+                android:textColor="#a282d3" />
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
+        app:layout_constraintVertical_bias="0.359">
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="5dp"
+            android:background="@drawable/dialog_button"
+            android:text="확인"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+
+        <Button
+            android:id="@+id/btn_reset"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="5dp"
+            android:background="@drawable/dialog_button"
+            android:padding="8dp"
+            android:text="초기화"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
