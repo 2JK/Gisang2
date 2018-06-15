@@ -1,5 +1,7 @@
 package com.example.jklee.netproject;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -32,8 +34,9 @@ public class ClientThread extends Thread {
     ClientThread(String serverIP, int serverPort) {
         this.serverIP = serverIP;
         this.serverPort = serverPort;
-        this.lat = String.valueOf(Location.getLatitude());
-        this.lon = String.valueOf(Location.getLongitude());
+        this.lat = String.format("%.4f", Location.getLatitude());
+        this.lon = String.format("%.4f", Location.getLongitude());
+        Log.d("loca", this.lat +" / " + this.lon);
     }
 
     ClientThread(String serverIP, int serverPort, String lat, String lon) {
@@ -141,7 +144,11 @@ public class ClientThread extends Thread {
             Weather.setPm10(Integer.parseInt(pm10));
             Weather.setPm25(Integer.parseInt(pm25));
 
-            Log.d("SocketTest", "stationName : " + stationName + ", pm10 : " + pm10);
+            Log.d("SocketTest", "stationName : " + stationName + ", pm10 : " + Weather.getPm10() + ", pm2.5 : " + Weather.getPm25());
+
+
+            MainActivity.setMainBgColor();
+
             socket.close();
             return;
 

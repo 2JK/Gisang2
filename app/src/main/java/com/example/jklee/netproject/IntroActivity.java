@@ -82,6 +82,7 @@ public class IntroActivity extends AppCompatActivity {
                     else
                         MainActivity.Gender = "female";
                     editor.putBoolean("isSelected", true);
+                    editor.commit();
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "나이 및 성별 정보를 선택해주세요.", Toast.LENGTH_LONG).show();

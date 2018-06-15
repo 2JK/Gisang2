@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="390dp"
+    android:layout_height="380dp"
     android:background="@drawable/dialog_background"
    >
 
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
-            android:paddingTop="8dp"
+            android:layout_gravity="center_vertical"
             android:text="추천의상"
             android:textColor="@android:color/white"
             android:textSize="20dp" />
@@ -36,12 +36,13 @@
             android:orientation="horizontal"
             android:gravity="right"
             android:layout_width="150dp"
+            android:layout_gravity="center_vertical"
             android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/textView_cDialogTitleTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
+                android:layout_gravity="center_vertical"
                 android:text="온도"
                 android:textColor="@android:color/white"
                 android:textSize="20dp"/>
@@ -52,12 +53,14 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:gravity="center"
+            android:layout_gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingTop="3dp"
             >
             <ImageView
                 android:id="@+id/imageView_gender"
+                android:layout_gravity="center_vertical"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
 
@@ -96,7 +99,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -111,13 +114,12 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout6"
         app:layout_constraintVertical_bias="0.0">
 
-        <Button
-            android:id="@+id/button_store"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:background="@drawable/dialog_button"
-            android:text="버튼"
-            android:textColor="@android:color/white"
+        <TextView
+            android:id="@+id/textView_store"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="추천코디 보기"
+            android:textColor="#a282d3"
             android:textSize="15dp" />
 
     </LinearLayout>

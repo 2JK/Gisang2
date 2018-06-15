@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     LinearLayout linearLayout_location;
     LinearLayout linearLayout_cloth;
-    ConstraintLayout main_constraintLayout;
+    static ConstraintLayout main_constraintLayout;
 
     public static ImageView imageView_weather;
     public static ImageView imageView_mask;
@@ -49,16 +49,14 @@ public class MainActivity extends AppCompatActivity {
     public static ImageView imageView_sunglasses;
 
     TextView textView_temperature;
-    TextView textView_dust_densityinfo;
+    static TextView textView_dust_densityinfo;
     TextView textView_pm10;
-    TextView textView_pm10_num;
+    static TextView textView_pm10_num;
     TextView textView_pm10_unit;
     TextView textView_pm25;
-    TextView textView_pm25_num;
+    static TextView textView_pm25_num;
     TextView textView_pm25_unit;
 
-    //임시 강제 파라미터
-    int dust_density = 259; // 미세먼지 농도
     public static String weather_api_key = "496073f3-0770-4307-be88-86970654ea17";
 
     FontSetting fontSetting;
@@ -71,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static String Gender;
     SharedPreferences pref;
+
+    private String IP_ADDR = "175.116.54.80";
+    private int PORT = 9999;
 
     @Override
     protected void onPostResume() {
@@ -86,11 +87,28 @@ public class MainActivity extends AppCompatActivity {
         View view = getWindow().getDecorView();
         view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
-        firstExecute();
-        normalSetting();
 
 
-        mTime = new Time();
+        Thread readyThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //... 준비 작업 ...
+                firstExecute();
+                mTime = new Time();
+                normalSetting();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setLocation();
+                        setWeather();
+                        //... UI 업데이트 작업
+                    }
+                });
+            }
+        });
+        readyThread.start();
+
+
         run_Time = new Runnable() {
             @Override
             public void run() {
@@ -102,15 +120,13 @@ public class MainActivity extends AppCompatActivity {
         timeHandler = new Handler();
         timeHandler.postDelayed(run_Time, 1000);
 
-        setLocation();
-
-        setWeather();
 
         run_Weather = new Runnable() {
             @Override
             public void run() {
                 Location.getLocation(getApplicationContext());
                 setLocation();
+                new ClientThread(IP_ADDR,PORT).start();
                 Weather.sendRequest4Weather(getApplicationContext());
                 Weather.getWeatherData();
                 setWeather();
@@ -120,21 +136,15 @@ public class MainActivity extends AppCompatActivity {
         weatherHandler = new Handler();
         weatherHandler.postDelayed(run_Weather, WEATHER_RESET_TIME);
 
-        Weather.setPm10(30);
-        setMainBgColor(Weather.getPm10());
-
     }
 
     private void firstExecute() {
         pref = getSharedPreferences("gisang", MODE_PRIVATE);
-        boolean isAlreadyExecuted = pref.getBoolean("isAlreadyExecuted", false);
         boolean isGenderSelected = pref.getBoolean("isSelected", false);
 
-        if (isGenderSelected == false) {
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean("isAlreadyExecuted", true);
-            editor.commit();
+        Log.d("gender", String.valueOf(isGenderSelected));
 
+        if (isGenderSelected == false) {
             Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
             startActivity(intent);
         } else {
@@ -155,10 +165,24 @@ public class MainActivity extends AppCompatActivity {
         linearLayout_cloth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomDialog cd = new CustomDialog(MainActivity.this);
-                cd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                cd.setCancelable(true);
-                cd.show();
+
+                Thread UIThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //... 준비 작업 ...
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                CustomDialog cd = new CustomDialog(MainActivity.this);
+                                cd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                cd.setCancelable(true);
+                                cd.show();
+                            }
+                        });
+                    }
+                });
+                UIThread.start();
             }
         });
 
@@ -169,14 +193,25 @@ public class MainActivity extends AppCompatActivity {
         button_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Location.getLocation(getApplicationContext());
-                setLocation();
-                Weather.sendRequest4Weather(getApplicationContext());
-                Weather.getWeatherData();
-                setWeather();
-                Random random = new Random();
-                setMainBgColor(random.nextInt(280));
+                Thread UIThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //... 준비 작업 ...
 
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Location.getLocation(getApplicationContext());
+                                setLocation();
+                                new ClientThread(IP_ADDR,PORT).start();
+                                Weather.sendRequest4Weather(getApplicationContext());
+                                Weather.getWeatherData();
+                                setWeather();
+                            }
+                        });
+                    }
+                });
+                UIThread.start();
             }
         });
 
@@ -229,25 +264,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     //미세먼지 농도에 따라 배경화면 색과 미세먼지 상태 표시
-    public void setMainBgColor(int density) {
+    public static void setMainBgColor() {
 
-        textView_pm10_num.setText(density + "㎍/㎥");
-        if (density < 31) // 좋음
+
+        Weather.setPm10(255);
+        Weather.setPm25(99);
+        int pm10 = Weather.getPm10();
+        if(pm10 == 0)
+            return;
+       textView_pm10_num.setText(String.valueOf(pm10));
+        textView_pm25_num.setText(String.valueOf(Weather.getPm25()));
+        if (pm10 < 31) // 좋음
         {
             main_constraintLayout.setBackgroundColor(Color.parseColor("#4d90eb"));
             textView_dust_densityinfo.setText("미세먼지 : 좋음");
             maskOff();
-        } else if (density < 81) // 보통
+        } else if (pm10 < 81) // 보통
         {
             main_constraintLayout.setBackgroundColor(Color.parseColor("#52ac52"));
             textView_dust_densityinfo.setText("미세먼지 : 보통");
             maskOff();
-        } else if (density < 121) // 약간나쁨
+        } else if (pm10 < 121) // 약간나쁨
         {
             main_constraintLayout.setBackgroundColor(Color.parseColor("#d8c03d"));
             textView_dust_densityinfo.setText("미세먼지 : 약간나쁨");
             maskOn();
-        } else if (density < 201) // 나쁨
+        } else if (pm10 < 201) // 나쁨
         {
             main_constraintLayout.setBackgroundColor(Color.parseColor("#d87f3d"));
             textView_dust_densityinfo.setText("미세먼지 : 나쁨");
@@ -270,18 +312,25 @@ public class MainActivity extends AppCompatActivity {
 
         if (Weather.getTemperature() == -99)
             return;
+        if(Weather.getPm10() == 0)
+            return;
 
-        textView_temperature.setText(Weather.getTemperature() + "℃");
 
-        System.out.println("Temperature : ==================" + Weather.getTemperature());
-        System.out.println("Temperature : ==================" + Weather.getWeatherCode());
+        String Temperature = String.valueOf(Weather.getTemperature());
+        Temperature = Temperature.concat("℃");
+        Log.d("temp", Temperature);
+        textView_temperature.setText(Temperature);
 
         WEATHER_RESET_TIME = 600000;
 
+        mTime.setToNow();
         boolean isAm = true;
+        Log.d("hour", String.valueOf(mTime.hour));
         if (mTime.hour > 20 || mTime.hour < 7)
             isAm = false;
-
+        Weather.setWeatherCode("SKY_O04");
+      //  isAm = true;
+        boolean isRainning = false;
         switch (Weather.getWeatherCode()) {
 
             case "SKY_O01":
@@ -303,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
                     imageView_weather.setImageResource(R.drawable.a03_pm);
                 break;
             case "SKY_O04":
+                isRainning = true;
                 if (isAm)
                     imageView_weather.setImageResource(R.drawable.a04_am);
                 else
@@ -315,6 +365,7 @@ public class MainActivity extends AppCompatActivity {
                     imageView_weather.setImageResource(R.drawable.a05_pm);
                 break;
             case "SKY_O06":
+                isRainning = true;
                 if (isAm)
                     imageView_weather.setImageResource(R.drawable.a06_am);
                 else
@@ -324,30 +375,48 @@ public class MainActivity extends AppCompatActivity {
                 imageView_weather.setImageResource(R.drawable.a07);
                 break;
             case "SKY_O08":
+                isRainning = true;
                 imageView_weather.setImageResource(R.drawable.a08);
                 break;
             case "SKY_O09":
                 imageView_weather.setImageResource(R.drawable.a09);
                 break;
             case "SKY_O10":
+                isRainning = true;
                 imageView_weather.setImageResource(R.drawable.a10);
                 break;
             case "SKY_O11":
                 imageView_weather.setImageResource(R.drawable.a11);
                 break;
             case "SKY_O12":
+                isRainning = true;
                 imageView_weather.setImageResource(R.drawable.a12);
                 break;
             case "SKY_O13":
                 imageView_weather.setImageResource(R.drawable.a13);
                 break;
             case "SKY_O14":
+                isRainning = true;
                 imageView_weather.setImageResource(R.drawable.a14);
                 break;
             default:
                 imageView_weather.setImageResource(R.drawable.a00);
                 break;
         }
+
+        // 날이 맑음이고 해가지기 전이며 기온이 25도 이상일때 선글라스 ON
+        if((Weather.getWeatherCode().equals("SKY_O01") && isAm) && Weather.getTemperature() >= 25)
+            sunglassesOn();
+        else
+            sunglassesOff();
+
+        //4시간 이내 비가 온다고 예보되면 우산ON
+        if(Weather.isRainy || isRainning)
+        umbrellaOn();
+        else
+            umbrellaOff();
+
+
     }
 
     void showTime(Time mTime) {

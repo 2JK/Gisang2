@@ -18,11 +18,13 @@ public class WebStoreDialog extends Dialog {
     public Dialog d;
     public int index;
     private Context mContext;
+    private String url;
 
-    public WebStoreDialog(Activity c) {
+    public WebStoreDialog(Activity c, String url) {
         super(c);
 
         this.a = c;
+        this.url = url;
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class WebStoreDialog extends Dialog {
         webSettings.setBuiltInZoomControls(true);
         Location location = new Location();
         //String url = "https://www.google.co.kr/maps/@" + String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + ",16z";
-        String url = "http://m.store.musinsa.com/app/product/detail/721489/0";
+
         webView.loadUrl(url);
 
     }
